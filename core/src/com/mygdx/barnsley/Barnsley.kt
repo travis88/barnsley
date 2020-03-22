@@ -1,25 +1,32 @@
 package com.mygdx.barnsley
 
 import com.badlogic.gdx.ApplicationAdapter
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Gdx.*
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
+import kotlin.math.roundToInt
 
 class Barnsley : ApplicationAdapter() {
     private lateinit var shapeRenderer: ShapeRenderer
     private lateinit var dots: ArrayList<Dot>
+    private var width = 0f
+    private var heigth = 0f
 
     override fun create() {
+        width = graphics.width.toFloat()
+        heigth = graphics.height.toFloat()
+
         shapeRenderer = ShapeRenderer()
         dots = ArrayList()
         dots.add(Dot(200f, 100f))
     }
 
     override fun render() {
-        gl.glClearColor(255f, 255f, 255f, 1f)
+//        gl.glClearColor(255f, 255f, 255f, 1f)
+        gl.glClearColor(0f, 0f, 0f, 1f)
         gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
         addDot()
@@ -58,7 +65,9 @@ class Barnsley : ApplicationAdapter() {
             else -> Dot(0f, 0f)
         }
         app.log(TAG, "${dot.x}, ${dot.y}")
-        dots.add(calculateUp(dot.x, dot.y, Color.valueOf("#116979")))
+        color.set((width / 2 + dot.x * width / 11).roundToInt() / 255f,
+                  (heigth / 2 - dot.y * heigth / 11).roundToInt() / 255f, (rnd / 2).toFloat(), 0f)
+        dots.add(calculateUp(dot.x, dot.y, color))
     }
 
     private fun calculateUp(x: Float, y: Float, color: Color): Dot {
